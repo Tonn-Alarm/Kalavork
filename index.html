@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Kalavõrk</title>
+</head>
+<body>
+
+<h1>🎣 Kalavõrgu monitor</h1>
+
+<p id="status">Laeb...</p>
+
+<input id="sens" placeholder="tundlikkus">
+<button onclick="setSens()">Muuda</button>
+
+<script>
+async function load() {
+  const res = await fetch('/status');
+  const data = await res.json();
+
+  document.getElementById('status').innerText =
+    "Staatus: " + data.event +
+    "\nTundlikkus: " + data.sensitivity;
+}
+
+async function setSens() {
+  const val = document.getElementById('sens').value;
+  await fetch('/set?s=' + val);
+  load();
+}
+
+setInterval(load, 2000);
+load();
+</script>
+
+</body>
+</html>
+
